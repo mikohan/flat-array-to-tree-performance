@@ -1,3 +1,32 @@
+export const stackOverflow = [
+	{
+		id: 1,
+		title: 'home',
+		parent: null,
+	},
+	{
+		id: 2,
+		title: 'about',
+		parent: null,
+	},
+	{
+		id: 3,
+		title: 'team',
+		parent: 2,
+	},
+	{
+		id: 4,
+		title: 'company',
+		parent: 2,
+	},
+	,
+	{
+		id: 5,
+		title: 'department',
+		parent: 4,
+	},
+];
+
 export const data = [
 	{
 		id: 1,
