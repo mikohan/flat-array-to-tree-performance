@@ -2,6 +2,7 @@ import axios from 'axios';
 import { stackOverflow, dataRecursive } from './data';
 import { array, tree } from './nina';
 import CircularJSON from 'circular-json';
+import fclone from 'fclone';
 
 // const result = axios
 // 	.get('http://localhost:8000/testcategory/categories/')
@@ -142,12 +143,13 @@ let t0 = performance.now();
 res().then((result) => {
 	// console.log(result);
 	const res = tree(result, null);
-	console.log(CircularJSON.stringify(res));
+	let fin = fclone(res);
+	console.log(fin);
 
 	document.getElementById('app').innerHTML = `
 	        <h1>Hello World!</h1>
 	        <pre>
-	        ${CircularJSON.stringify(res)}
+	        ${JSON.stringify(fin)}
 	        </pre>
 	        `;
 });
