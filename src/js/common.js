@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { stackOverflow } from './data';
+import { stackOverflow, dataRecursive } from './data';
 
 // const result = axios
 // 	.get('http://localhost:8000/testcategory/categories/')
@@ -121,3 +121,19 @@ res().then((result) => {
 });
 let t1 = performance.now();
 console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
+
+// dataRecursive.forEach((el) => console.log(el));
+
+export function flatTree(categories) {
+	let result = [];
+
+	console.log(categories, 'In flatTree defination');
+
+	categories.forEach((category) => {
+		result = [...result, category, ...flatTree(category.children)];
+	});
+
+	return result;
+}
+
+console.log(flatTree(dataRecursive));
