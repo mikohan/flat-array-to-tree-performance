@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { stackOverflow, dataRecursive } from './data';
+import { array, tree } from './nina';
+import CircularJSON from 'circular-json';
 
 // const result = axios
 // 	.get('http://localhost:8000/testcategory/categories/')
@@ -74,7 +76,7 @@ const treeify = (arr) => {
 		// 1. access it in constant time now that we have a lookup table
 		// 2. since children is preconfigured, we simply push the item
 		if (o.parent !== null) {
-			lookup[o.parent].children.push(o);
+			lookup[o.parent.id].children.push(o);
 		} else {
 			// no o.parent so this is a "root at the top level of our tree
 			tree.push(o);
@@ -108,32 +110,47 @@ const treeify2 = (data, pid = null, parent = null) => {
 	}, []);
 };
 
+// let t0 = performance.now();
+// res().then((result) => {
+// 	// console.log(result);
+// 	const tree = treeify(result);
+// 	console.log(flatTree(tree));
+// 	document.getElementById('app').innerHTML = `
+//         <h1>Hello World!</h1>
+//         <pre>
+//         ${JSON.stringify(tree, undefined, 2)}
+//         </pre>
+//         `;
+// });
+// let t1 = performance.now();
+// console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
+
+// // dataRecursive.forEach((el) => console.log(el));
+
+// export function flatTree(categories) {
+// 	let result = [];
+
+// 	categories.forEach((category) => {
+// 		result = [...result, category, ...flatTree(category.children)];
+// 	});
+
+// 	return result;
+// }
+
+// console.log(flatTree(dataRecursive));
 let t0 = performance.now();
 res().then((result) => {
-	console.log(result);
-	const tree = treeify2(result);
+	// console.log(result);
+	const res = tree(result, null);
+	console.log(CircularJSON.stringify(res));
+
 	document.getElementById('app').innerHTML = `
-        <h1>Hello World!</h1>
-        <pre>
-        ${JSON.stringify(tree, undefined, 2)}
-        </pre>
-        `;
+	        <h1>Hello World!</h1>
+	        <pre>
+	        ${CircularJSON.stringify(res)}
+	        </pre>
+	        `;
 });
+console.log();
 let t1 = performance.now();
 console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
-
-// dataRecursive.forEach((el) => console.log(el));
-
-export function flatTree(categories) {
-	let result = [];
-
-	console.log(categories, 'In flatTree defination');
-
-	categories.forEach((category) => {
-		result = [...result, category, ...flatTree(category.children)];
-	});
-
-	return result;
-}
-
-console.log(flatTree(dataRecursive));
