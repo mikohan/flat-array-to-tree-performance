@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { stackOverflow, dataRecursive } from './data';
 import { array, tree } from './nina';
-import CircularJSON from 'circular-json';
-import fclone from 'fclone';
+import { parse, stringify } from 'flatted';
+import { flatTree } from './flatTree';
 
 // const result = axios
 // 	.get('http://localhost:8000/testcategory/categories/')
@@ -12,7 +12,7 @@ import fclone from 'fclone';
 
 const res = async () => {
 	const promise = await axios.get(
-		'http://localhost:8000/testcategory/categories/'
+		'http://localhost:8000/testcategory/categories-for-testes/'
 	);
 
 	return promise.data;
@@ -95,13 +95,13 @@ const data = [
 	{ id: 5, title: 'department', parent: 4 },
 ];
 
-const treeify2 = (data, pid = null, parent = null) => {
+const treeifyR = (data, pid = null, parent = null) => {
 	return data.reduce((r, e) => {
 		if (e.parent === pid) {
 			const o = { ...e };
 			if (parent) o.parent = parent;
 
-			const children = treeify2(data, e.id, e);
+			const children = treeifyR(data, e.id, e);
 			if (children.length) o.children = children;
 
 			r.push(o);
@@ -111,48 +111,41 @@ const treeify2 = (data, pid = null, parent = null) => {
 	}, []);
 };
 
+// const result = treeify(data);
+// console.log(JSON.stringify(result, 0, 4))
+
+let t0 = performance.now();
+
+res().then((result) => {
+	// console.log(result);
+	const tree = treeifyR(result);
+	// console.log(flatTree(dataRecursive));
+
+	document.getElementById('app').innerHTML = `
+        <h1>Hello World!</h1>
+        <pre>
+        ${JSON.stringify(tree, undefined, 4)}
+        </pre>
+        `;
+});
+let t1 = performance.now();
+console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
+
+// console.log(flatTree(dataRecursive));
 // let t0 = performance.now();
 // res().then((result) => {
 // 	// console.log(result);
-// 	const tree = treeify(result);
-// 	console.log(flatTree(tree));
+// 	const res = tree(result, null);
+// 	let fin = fclone(res);
+// 	console.log(stringify(res, res.parent));
+
 // 	document.getElementById('app').innerHTML = `
-//         <h1>Hello World!</h1>
-//         <pre>
-//         ${JSON.stringify(tree, undefined, 2)}
-//         </pre>
-//         `;
+// 	        <h1>Hello World!</h1>
+// 	        <pre>
+// 	        ${JSON.parse(stringify(res)}
+// 	        </pre>
+// 	        `;
 // });
+
 // let t1 = performance.now();
 // console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
-
-// // dataRecursive.forEach((el) => console.log(el));
-
-// export function flatTree(categories) {
-// 	let result = [];
-
-// 	categories.forEach((category) => {
-// 		result = [...result, category, ...flatTree(category.children)];
-// 	});
-
-// 	return result;
-// }
-
-// console.log(flatTree(dataRecursive));
-let t0 = performance.now();
-res().then((result) => {
-	// console.log(result);
-	const res = tree(result, null);
-	let fin = fclone(res);
-	console.log(fin);
-
-	document.getElementById('app').innerHTML = `
-	        <h1>Hello World!</h1>
-	        <pre>
-	        ${JSON.stringify(fin)}
-	        </pre>
-	        `;
-});
-console.log();
-let t1 = performance.now();
-console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
