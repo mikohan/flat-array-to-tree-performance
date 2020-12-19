@@ -5,14 +5,15 @@ import { parse, stringify } from 'flatted';
 import { flatTree } from './flatTree';
 
 // const result = axios
-// 	.get('http://localhost:8000/testcategory/categories/')
+// 	.get('http://localhost:8000/testcategory/testcategories/')
 // 	.then((r) => {
 // 		console.log(r.data);
 // 	});
 
 const res = async () => {
 	const promise = await axios.get(
-		'http://localhost:8000/testcategory/categories-for-testes/'
+		//'http://localhost:8000/testcategory/categories-for-testes/'
+		'http://localhost:8000/testcategory/testcategories/'
 	);
 
 	return promise.data;
@@ -117,8 +118,8 @@ const treeifyR = (data, pid = null, parent = null) => {
 let t0 = performance.now();
 
 res().then((result) => {
-	// console.log(result);
-	const tree = treeifyR(result);
+	console.log(result);
+	const tree = treeify(result);
 	// console.log(flatTree(dataRecursive));
 
 	document.getElementById('app').innerHTML = `
