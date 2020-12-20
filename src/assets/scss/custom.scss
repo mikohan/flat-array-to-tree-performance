@@ -1,0 +1,25 @@
+.innerDiv {
+  max-width: 200px;
+  min-height: 50px;
+  transition: height 500ms;
+  overflow: hidden;
+}
+
+.outerDiv {
+  padding: 10px;
+  max-width: 200px;
+  background-color: rgba(251, 251, 253, 1);
+}
+.chevronDown {
+  cursor: pointer;
+}
+
+.chevronDiv {
+  max-width: 200px;
+}
+
+.chevronName {
+  margin-left: 20px;
+  font-size: 90%;
+  cursor: pointer;
+}
