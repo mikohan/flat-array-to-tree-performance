@@ -9,49 +9,51 @@ import { flatTree } from './flatTree';
 // 	.then((r) => {
 // 		console.log(r.data);
 // 	});
+console.log('in application');
 
 const res = async () => {
-	const promise = await axios.get(
-		//'http://localhost:8000/testcategory/categories-for-testes/'
-		'http://localhost:8000/testcategory/testcategories/'
-	);
+  const promise = await axios.get(
+    //'http://localhost:8000/testcategory/categories-for-testes/'
+    'http://localhost:8000/api/product/jsontest?q=%D0%9F%D0%BE%D1%80%D1%82%D0%B5%D1%801'
+    //'http://localhost:8000/testcategory/testcategories/'
+  );
 
-	return promise.data;
+  return promise.data;
 };
 
 async function getTree() {
-	const list = await res();
+  const list = await res();
 
-	var map = {},
-		node,
-		roots = [],
-		i;
+  var map = {},
+    node,
+    roots = [],
+    i;
 
-	for (i = 0; i < list.length; i += 1) {
-		map[list[i].id] = i; // initialize the map
-		list[i].children = []; // initialize the children
-		list[i].superParent = null;
-	}
+  for (i = 0; i < list.length; i += 1) {
+    map[list[i].id] = i; // initialize the map
+    list[i].children = []; // initialize the children
+    list[i].superParent = null;
+  }
 
-	for (i = 0; i < list.length; i += 1) {
-		node = list[i];
-		if (node.parent !== null) {
-			const parentNode = Object.assign(
-				{},
-				list.find((el) => el.parent === node.parent)
-			);
-			list[i].superParent = parentNode;
-			// if you have dangling branches check that map[node.parentId] exists
-			// console.log(node.parent);
-			// list[map[node.parent]].superParent = node;
+  for (i = 0; i < list.length; i += 1) {
+    node = list[i];
+    if (node.parent !== null) {
+      const parentNode = Object.assign(
+        {},
+        list.find((el) => el.parent === node.parent)
+      );
+      list[i].superParent = parentNode;
+      // if you have dangling branches check that map[node.parentId] exists
+      // console.log(node.parent);
+      // list[map[node.parent]].superParent = node;
 
-			list[map[node.parent]].children.push(node);
-		} else {
-			roots.push(node);
-		}
-	}
+      list[map[node.parent]].children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
 
-	document.getElementById('app').innerHTML = `
+  document.getElementById('app').innerHTML = `
         <h1>Hello World!</h1>
         <pre>
         ${JSON.stringify(roots, undefined, 2)}
@@ -64,65 +66,65 @@ async function getTree() {
 // console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
 
 const treeify = (arr) => {
-	const tree = [];
-	const lookup = {};
-	// Initialize lookup table with each array item's id as key and
-	// its children initialized to an empty array
-	arr.forEach((o) => {
-		lookup[o.id] = o;
-		lookup[o.id].children = [];
-	});
-	// console.log(lookup, 'Lookup object');
-	arr.forEach((o) => {
-		// If the item has a parent we
-		// 1. access it in constant time now that we have a lookup table
-		// 2. since children is preconfigured, we simply push the item
-		if (o.parent !== null) {
-			lookup[o.parent.id].children.push(o);
-		} else {
-			// no o.parent so this is a "root at the top level of our tree
-			tree.push(o);
-		}
-	});
-	return tree;
+  console.log(arr);
+  const tree = [];
+  const lookup = {};
+  // Initialize lookup table with each array item's id as key and
+  // its children initialized to an empty array
+  arr.forEach((o) => {
+    lookup[o.id] = o;
+    lookup[o.id].children = [];
+  });
+  // console.log(lookup, 'Lookup object');
+  arr.forEach((o) => {
+    // If the item has a parent we
+    // 1. access it in constant time now that we have a lookup table
+    // 2. since children is preconfigured, we simply push the item
+    if (o.parent !== null) {
+      lookup[o.parent].children.push(o);
+    } else {
+      // no o.parent so this is a "root at the top level of our tree
+      tree.push(o);
+    }
+  });
+  return tree;
 };
 
 // from stack overflow
 const data = [
-	{ id: 1, title: 'home', parent: null },
-	{ id: 2, title: 'about', parent: null },
-	{ id: 3, title: 'team', parent: 2 },
-	{ id: 4, title: 'company', parent: 2 },
-	{ id: 5, title: 'department', parent: 4 },
+  { id: 1, title: 'home', parent: null },
+  { id: 2, title: 'about', parent: null },
+  { id: 3, title: 'team', parent: 2 },
+  { id: 4, title: 'company', parent: 2 },
+  { id: 5, title: 'department', parent: 4 },
 ];
 
 const treeifyR = (data, pid = null, parent = null) => {
-	return data.reduce((r, e) => {
-		if (e.parent === pid) {
-			const o = { ...e };
-			if (parent) o.parent = parent;
+  return data.reduce((r, e) => {
+    if (e.parent === pid) {
+      const o = { ...e };
+      if (parent) o.parent = parent;
 
-			const children = treeifyR(data, e.id, e);
-			if (children.length) o.children = children;
+      const children = treeifyR(data, e.id, e);
+      if (children.length) o.children = children;
 
-			r.push(o);
-		}
+      r.push(o);
+    }
 
-		return r;
-	}, []);
+    return r;
+  }, []);
 };
 
 // const result = treeify(data);
 // console.log(JSON.stringify(result, 0, 4))
 
 let t0 = performance.now();
-
 res().then((result) => {
-	console.log(result);
-	const tree = treeify(result);
-	// console.log(flatTree(dataRecursive));
+  const arr = result.aggregations.categories.buckets;
+  const tree = treeify(arr);
+  // console.log(flatTree(dataRecursive));
 
-	document.getElementById('app').innerHTML = `
+  document.getElementById('app').innerHTML = `
         <h1>Hello World!</h1>
         <pre>
         ${JSON.stringify(tree, undefined, 4)}
