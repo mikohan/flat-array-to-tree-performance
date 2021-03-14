@@ -1,7 +1,7 @@
 import './assets/css/style.css';
 import './assets/css/aaa.css';
 // This file for testing make tree from flat
-import './js/common';
+// import './js/common';
 
 // SCSS
 //import './assets/scss/main.scss'
@@ -11,3 +11,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // This is for testing filters collapsing
 //import './js/collapse';
+
+// testing graphql
+import './js/graphql';

@@ -41,12 +41,14 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.11",
     "@popperjs/core": "^2.4.0",
     "axios": "^0.21.0",
     "bootstrap": "^4.4.1",
     "circular-json": "^0.5.9",
     "fclone": "^1.0.11",
     "flatted": "^3.1.0",
+    "graphql": "^15.5.0",
     "jquery": "^3.5.0",
     "popper.js": "^1.16.1",
     "sass": "^1.32.8",
