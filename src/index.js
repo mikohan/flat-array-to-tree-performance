@@ -12,5 +12,5 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // This is for testing filters collapsing
 //import './js/collapse';
 
-// testing graphql
-import './js/graphql';
+// Working on categories tree
+import './js/categoreis';
