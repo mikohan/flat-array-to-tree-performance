@@ -1,21 +1,26 @@
 import { categories } from './data/categoriesData';
 
-export function getCategoryPath(category, categories) {
-	const parent = getParent(category.parent, categories);
-	console.log(parent);
-	return category.parent
-		? [...getCategoryPath(parent, categories), category]
-		: [];
-}
+export function getCatPath(category, categories) {
+	let mainCat;
+	function getCategoryPath(category, categories) {
+		let parent = getParent(category.parent, categories);
+		if (category.parent === null) {
+			mainCat = category;
+		}
+		return parent ? [...getCategoryPath(parent, categories), category] : [];
+	}
 
-function getParent(parentId, categoreis) {
-	const parent = categories.find((element) => element.id == parentId);
-	if (parent) {
+	function getParent(parentId) {
+		const parent = categories.find((element) => element.id == parentId);
+
 		return parent;
 	}
-	return null;
+
+	const pathArr = getCategoryPath(cat, categories);
+	const nArr = pathArr.push(mainCat);
+	return pathArr;
 }
 
-// console.log(getParent(categories[10].parent, categories));
 const cat = categories.find((el) => el.id === 2769);
-console.log(getCategoryPath(cat, categories));
+const path = getCatPath(cat, categories);
+console.log(path);
