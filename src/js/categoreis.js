@@ -1,26 +1,33 @@
 import { categories } from './data/categoriesData';
+import { makeTree } from './flatTree';
 
-export function getCatPath(category, categories) {
-	let mainCat;
-	function getCategoryPath(category, categories) {
-		let parent = getParent(category.parent, categories);
-		if (category.parent === null) {
-			mainCat = category;
-		}
-		return parent ? [...getCategoryPath(parent, categories), category] : [];
+export function prepareCategory(category, depth) {
+	let children;
+
+	if (depth && depth > 0) {
+		children = (category.children || []).map((x) =>
+			prepareCategory(x, depth - 1)
+		);
 	}
 
-	function getParent(parentId) {
-		const parent = categories.find((element) => element.id == parentId);
+	let parent;
 
-		return parent;
+	if (category.parent) {
+		parent = prepareCategory(category.parent);
+	} else if (category.parent === null) {
+		parent = null;
 	}
 
-	const pathArr = getCategoryPath(cat, categories);
-	const nArr = pathArr.push(mainCat);
-	return pathArr;
+	return JSON.parse(
+		JSON.stringify({
+			...category,
+			parent,
+			children,
+		})
+	);
 }
+const myCat = categories.find((item) => item.id === 34);
+console.log(myCat);
 
-const cat = categories.find((el) => el.id === 2769);
-const path = getCatPath(cat, categories);
-console.log(path);
+const tree = makeTree(categories);
+console.log(tree, 'Im here');
