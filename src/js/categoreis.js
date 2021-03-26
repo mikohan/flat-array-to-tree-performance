@@ -47,5 +47,5 @@ function searchTree(element, matchingTitle) {
 
 const tree = makeTree(categories);
 console.log(tree, 'Im here');
-const s = searchTree(tree[0], 'transmissija');
+const s = searchTree(tree[0], 'korobka-peredach-i-zapchasti');
 console.log(s);
