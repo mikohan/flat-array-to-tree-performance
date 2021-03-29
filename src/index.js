@@ -13,4 +13,5 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //import './js/collapse';
 
 // Working on categories tree
-import './js/categoreis';
+// import './js/categoreis';
+import './js/serializer';
